@@ -7,12 +7,18 @@ pipeline {
     }
     stages {
         stage('Build Java Application') {
-            steps {
-                echo 'Iniciando compilación y empaquetado del JAR...'
-                withMaven(maven: 'M3') {
-                sh  'mvn clean package -DskipTests'
-                }
+        agent{
+            docker {
+                image 'maven:3.9.5-openjdk-17-slim'
+                args '-v $HOME/.m2:/root/.m2'
             }
+        }
+        steps {
+            echo 'Iniciando compilación y empaquetado del JAR...'
+            withMaven(maven: 'M3') {
+            sh  'mvn clean package -DskipTests'
+            }
+        }
         }
 
         stage('Run Python Tests') {
