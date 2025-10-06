@@ -9,7 +9,9 @@ pipeline {
         stage('Build Java Application') {
             steps {
                 echo 'Iniciando compilación y empaquetado del JAR...'
+                withMaven(maven: 'M3') {
                 sh  'mvn clean package -DskipTests'
+                }
             }
         }
 
